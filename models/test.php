@@ -718,6 +718,57 @@ class test_class extends AWS_MODEL {
 		}
 
 	}
+	
+	public function get_all_question_page($page) {
+
+		// $posts_index = $this->fetch_page('posts_index', implode(' AND ', $where), $order_key, $page, $per_page);
+		//if ($result = $this->fetch_all ( 'question', "", "update_time DESC" )) {
+		if ($result = $this->fetch_page ( 'question', null, "update_time DESC",$page, 20 )) {	
+			foreach ( $result as $key => $val ) {
+
+				$data [$key] ['question_info'] = $val;
+				
+			
+			   // here should parse answer_content for get img url directly by anxiang.xiao 20150827
+	
+				$data [$key] ['question_info'] ['question_detail'] = $this->model('question')->parse_at_user(FORMAT::parse_attachs2(nl2br(FORMAT::parse_bbcode($data [$key] ['question_info'] ['question_detail']))));
+		
+				$data [$key] ['question_publish_user_info'] = $this->fetch_row ( 'users', 'uid = ' . $val ['published_uid'] );
+
+				if ($data [$key] ['question_publish_user_info']['avatar_file'])
+				{
+					$data [$key] ['question_publish_user_info']['avatar_file'] = get_avatar_url($data [$key] ['question_publish_user_info']['uid'], 'min');
+				}
+
+
+				$data [$key] ['category_info'] = $this->fetch_row ( 'category', 'id = ' . $val ['category_id'] );
+
+				$data [$key] ['question_newest_answer_info'] = $this->fetch_row ( 'answer', 'question_id = ' . $val ['question_id'], "add_time DESC" );
+				;
+
+				/*
+				 *
+				 * $data[$key]['question_info'] = $val;
+
+					if ($val['published_uid'] != 0)
+					$data[$key]['question_publish_user_info'] =  $this->fetch_row('users','uid = ' .$val['published_uid'] );
+					else
+					$data[$key]['question_publish_user_info'] =  "{}";
+
+					if ($val['category_id'] != 0)
+					$data[$key]['category_info'] =  $this->fetch_row('category','id = ' .$val['category_id'] );
+					else
+					$data[$key]['category_info'] =  "{}";
+					*/
+					
+			}
+			return $data;
+				
+			// return  $posts_index;
+		}
+
+	}
+	
 
 	public function get_all_question() {
 		// return "helloword23333333";

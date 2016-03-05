@@ -27,7 +27,7 @@ class ajax extends AWS_CONTROLLER {
 		$rule_action ['rule_type'] = 'white'; //����,�����еļ��  'white'����,��������ļ��
 
 
-		$rule_action ['actions'] = array ('check_username', 'check_email', 'register_process', 'login_process', 'register_agreement', 'send_valid_mail', 'valid_email_active', 'request_find_password', 'find_password_modify', 'weixin_login_process', 'list_question', 'add_question', 'get_answer_list', 'add_answer', 'focus', 'get_comment_list', 'get_focus_users', 'add_comment', 'get_focus_topic', 'get_friend_users', 'get_fans_users', 'get_questioned_question', 'get_question_ansered_answer', 'user_actions', 'get_current_user_info', 'list_notification', 'get_user_focus_question', 'get_inbox_dialog_list', 'get_favor_tag', 'get_search_users', 'get_search_questions', 'save_invite' ,'send_inboxmessage','get_message_list','add_favor_tag','is_already_focuse','add_favor_tag','update_answer_in_favor_tag','get_answer_comments','save_answer_comment','change_focus','user_follow_check','get_answer_info','get_category_questions','privacy','privacy_email_setting','privacy_notification_setting','profile_setting','upload_answer_img','avatar_upload_2','upload_question_img','list_category','get_search_category','question_answer_rate', 'answer_vote','question_thanks', 'get_question_thanks','register_process2','get_answer_thanks','get_answer_vote');
+		$rule_action ['actions'] = array ('check_username', 'check_email', 'register_process', 'login_process', 'register_agreement', 'send_valid_mail', 'valid_email_active', 'request_find_password', 'find_password_modify', 'weixin_login_process', 'list_question', 'add_question', 'get_answer_list', 'add_answer', 'focus', 'get_comment_list', 'get_focus_users', 'add_comment', 'get_focus_topic', 'get_friend_users', 'get_fans_users', 'get_questioned_question', 'get_question_ansered_answer', 'user_actions', 'get_current_user_info', 'list_notification', 'get_user_focus_question', 'get_inbox_dialog_list', 'get_favor_tag', 'get_search_users', 'get_search_questions', 'save_invite' ,'send_inboxmessage','get_message_list','add_favor_tag','is_already_focuse','add_favor_tag','update_answer_in_favor_tag','get_answer_comments','save_answer_comment','change_focus','user_follow_check','get_answer_info','get_category_questions','privacy','privacy_email_setting','privacy_notification_setting','profile_setting','upload_answer_img','avatar_upload_2','upload_question_img','list_category','get_search_category','question_answer_rate', 'answer_vote','question_thanks', 'get_question_thanks','register_process2','get_answer_thanks','get_answer_vote','list_question_page');
 
 		return $rule_action;
 	}
@@ -1656,6 +1656,32 @@ class ajax extends AWS_CONTROLLER {
 
 			}
 
+		}
+		
+		
+	public function list_question_page_action() {
+			//echo "this login_process_action";
+			if (isset ( $_POST ['name'] )) {
+				$username = trim ( $_POST ['name'] );
+				$passwd = trim ( $_POST ['passwd'] );
+				$user_info = $this->model ( 'account' )->check_login ( $username, $passwd );
+					
+				echo $user_info ['user_name'];
+				echo $user_info ['user_name'];
+			} else {
+				/*$questionContent = isset($_POST['questionContent']) ? trim($_POST['questionContent']) : 'test content';
+				 $questionDetail = isset($_POST['questionDetail']) ? trim($_POST['questionDetail']) : 'test detail';
+				 $question_id = $this->model('publish')->publish_question($questionContent, $questionDetail, $_POST['category_id'], $this->user_id, $_POST['topics'], $_POST['anonymous'], $_POST['attach_access_key'], $_POST['ask_user_id'], $this->user_info['permission']['create_topic']);*/
+				$data = $this->model ( 'test' )->get_all_question_page ($_GET['page']);
+					
+				if ($data)
+					echo json_encode ( $array = array ("value" => $data ) );
+				else 	
+					echo json_encode ( $array = array ("novalue" => $data ) );
+
+			}
+
+			
 		}
 
 		public function list_question_action() {
